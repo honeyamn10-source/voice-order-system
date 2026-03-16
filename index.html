@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>My Shop — Order with Alex</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --c-idle:    #6C63FF;
+  --c-listen:  #00C896;
+  --c-think:   #4A9EFF;
+  --c-speak:   #A78BFA;
+  --bg:        #08080F;
+  --bg2:       #0F0F1A;
+  --border:    rgba(255,255,255,0.07);
+  --text:      rgba(255,255,255,0.9);
+  --muted:     rgba(255,255,255,0.35);
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(8,8,15,0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 100;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.logo-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--c-idle);
+  transition: background 0.4s, box-shadow 0.4s;
+}
+
+body.s-listening  .logo-dot { background: var(--c-listen); box-shadow: 0 0 8px var(--c-listen); }
+body.s-thinking   .logo-dot { background: var(--c-think);  box-shadow: 0 0 8px var(--c-think); }
+body.s-speaking   .logo-dot { background: var(--c-speak);  box-shadow: 0 0 8px var(--c-speak); }
+
+.pill {
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: all 0.35s;
+}
+.pill.live {
+  border-color: rgba(0,200,150,0.3);
+  background: rgba(0,200,150,0.08);
+  color: var(--c-listen);
+}
+.pill.saved {
+  border-color: rgba(167,139,250,0.3);
+  background: rgba(167,139,250,0.08);
+  color: var(--c-speak);
+}
+
+/* ── MAIN LAYOUT ── */
+.page {
+  padding-top: 56px;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px 0;
+  width: 100%;
+  max-width: 440px;
+}
+
+/* ── ORB ── */
+.orb-wrap {
+  position: relative;
+  width: 180px; height: 180px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 32px;
+  cursor: pointer;
+}
+
+.ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  animation: ring-pulse 3.2s ease-out infinite;
+  opacity: 0;
+  transition: border-color 0.4s;
+}
+.ring-1 { width: 100%; height: 100%; animation-delay: 0s; }
+.ring-2 { width: 132%; height: 132%; animation-delay: 1s; }
+.ring-3 { width: 164%; height: 164%; animation-delay: 2s; }
+
+@keyframes ring-pulse {
+  0%   { transform: scale(0.85); opacity: 0.55; }
+  100% { transform: scale(1.08); opacity: 0; }
+}
+
+body.s-idle      .ring { border-color: var(--c-idle);   animation-duration: 3.2s; }
+body.s-listening .ring { border-color: var(--c-listen); animation-duration: 1.4s; }
+body.s-thinking  .ring { border-color: var(--c-think);  animation-duration: 2s; }
+body.s-speaking  .ring { border-color: var(--c-speak);  animation-duration: 0.9s; }
+
+.orb {
+  width: 112px; height: 112px;
+  border-radius: 50%;
+  position: relative; z-index: 2;
+  background: radial-gradient(circle at 38% 32%, #9C8FFF 0%, #4A42CC 100%);
+  box-shadow: 0 0 48px rgba(108,99,255,0.45);
+  transition: background 0.45s, box-shadow 0.45s, transform 0.15s;
+  display: flex; align-items: center; justify-content: center;
+  user-select: none;
+}
+.orb:active { transform: scale(0.96); }
+
+.orb::after {
+  content: '';
+  position: absolute;
+  top: 14%; left: 19%;
+  width: 28%; height: 18%;
+  background: rgba(255,255,255,0.22);
+  border-radius: 50%;
+  filter: blur(3px);
+}
+
+body.s-listening .orb {
+  background: radial-gradient(circle at 38% 32%, #3DFAB4 0%, #009E70 100%);
+  box-shadow: 0 0 56px rgba(0,200,150,0.5);
+}
+body.s-thinking .orb {
+  background: radial-gradient(circle at 38% 32%, #7EC8FF 0%, #1570C8 100%);
+  box-shadow: 0 0 56px rgba(74,158,255,0.5);
+  animation: think-breathe 1.6s ease-in-out infinite;
+}
+body.s-speaking .orb {
+  background: radial-gradient(circle at 38% 32%, #D4ACFF 0%, #7C3AED 100%);
+  box-shadow: 0 0 64px rgba(167,139,250,0.6);
+}
+
+@keyframes think-breathe {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+/* ── WAVE BARS ── */
+.waves {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+body.s-speaking .waves { opacity: 1; }
+
+.bar {
+  width: 3px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.85);
+  animation: bar-dance 0.7s ease-in-out infinite alternate;
+}
+.bar:nth-child(1) { height:10px; animation-delay:0s; }
+.bar:nth-child(2) { height:18px; animation-delay:0.08s; }
+.bar:nth-child(3) { height:28px; animation-delay:0.16s; }
+.bar:nth-child(4) { height:36px; animation-delay:0.24s; }
+.bar:nth-child(5) { height:28px; animation-delay:0.16s; }
+.bar:nth-child(6) { height:18px; animation-delay:0.08s; }
+.bar:nth-child(7) { height:10px; animation-delay:0s; }
+
+@keyframes bar-dance {
+  0%   { transform: scaleY(0.25); opacity: 0.4; }
+  100% { transform: scaleY(1);    opacity: 1; }
+}
+
+/* ── MIC ICON (idle) ── */
+.mic-icon {
+  font-size: 28px;
+  opacity: 0.9;
+  transition: opacity 0.3s;
+}
+body.s-listening .mic-icon,
+body.s-thinking  .mic-icon,
+body.s-speaking  .mic-icon { opacity: 0; }
+
+/* ── STATE LABEL ── */
+.label {
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  height: 18px;
+  transition: color 0.3s;
+}
+body.s-listening .label { color: var(--c-listen); }
+body.s-thinking  .label { color: var(--c-think); }
+body.s-speaking  .label { color: var(--c-speak); }
+
+/* ── TRANSCRIPT ── */
+.chat {
+  width: 100%;
+  max-height: 220px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 28px;
+  padding-right: 2px;
+  scrollbar-width: none;
+}
+.chat::-webkit-scrollbar { display: none; }
+
+.msg {
+  max-width: 82%;
+  padding: 9px 14px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.55;
+  animation: pop-in 0.22s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(0.9) translateY(4px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.msg-user {
+  align-self: flex-end;
+  background: rgba(255,255,255,0.09);
+  color: rgba(255,255,255,0.85);
+  border-bottom-right-radius: 4px;
+}
+.msg-alex {
+  align-self: flex-start;
+  background: rgba(108,99,255,0.18);
+  border: 1px solid rgba(108,99,255,0.25);
+  color: rgba(255,255,255,0.92);
+  border-bottom-left-radius: 4px;
+}
+.msg-system {
+  align-self: center;
+  font-size: 11px;
+  color: var(--muted);
+  background: none;
+  padding: 0;
+  letter-spacing: 0.04em;
+  animation: none;
+  opacity: 0.6;
+}
+
+/* ── BUTTONS ── */
+.btn-row { width: 100%; display: flex; gap: 10px; margin-bottom: 20px; }
+
+.btn {
+  flex: 1;
+  padding: 15px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+  letter-spacing: -0.01em;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: var(--c-idle); color: #fff; border-color: transparent; box-shadow: 0 4px 24px rgba(108,99,255,0.35); }
+.btn-primary:hover { opacity: 0.88; }
+.btn-end { background: rgba(255,255,255,0.05); color: var(--muted); display: none; }
+.btn-end:hover { background: rgba(255,255,255,0.09); color: var(--text); }
+.btn-end.show { display: block; }
+.btn-primary.hide { display: none; }
+
+/* ── ORDER CARD ── */
+.order-card {
+  width: 100%;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 24px;
+  display: none;
+  animation: pop-in 0.3s ease;
+}
+.order-card.show { display: block; }
+
+.order-head {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.order-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: rgba(255,255,255,0.75);
+  padding: 4px 0;
+}
+.order-divider { border: none; border-top: 1px solid var(--border); margin: 10px 0; }
+.order-total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+}
+.badge-saved {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(0,200,150,0.12);
+  color: var(--c-listen);
+  border: 1px solid rgba(0,200,150,0.25);
+  vertical-align: middle;
+  letter-spacing: 0.04em;
+}
+
+/* ── HINT ── */
+.hint { font-size: 12px; color: rgba(255,255,255,0.2); text-align: center; padding-bottom: 32px; }
+</style>
+</head>
+<body class="s-idle">
+
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-dot"></div>
+    My Shop
+  </div>
+  <div class="pill" id="pill">Offline</div>
+</div>
+
+<div class="page">
+  <div class="stage">
+
+    <!-- ORB -->
+    <div class="orb-wrap" onclick="handleOrbTap()">
+      <div class="ring ring-1"></div>
+      <div class="ring ring-2"></div>
+      <div class="ring ring-3"></div>
+      <div class="orb" id="orb">
+        <div class="mic-icon">🎙️</div>
+        <div class="waves">
+          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+          <div class="bar"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="label" id="label">Tap orb to start</div>
+
+    <!-- CHAT -->
+    <div class="chat" id="chat"></div>
+
+    <!-- BUTTONS -->
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btnStart" onclick="startCall()">Talk to Alex</button>
+      <button class="btn btn-end" id="btnEnd" onclick="endCall()">End call</button>
+    </div>
+
+    <!-- ORDER SUMMARY -->
+    <div class="order-card" id="orderCard">
+      <div class="order-head">Order summary <span class="badge-saved" id="savedBadge" style="display:none">Saved ✓</span></div>
+      <div id="orderRows"></div>
+      <hr class="order-divider">
+      <div class="order-total"><span>Total</span><span id="orderTotalAmt"></span></div>
+    </div>
+
+    <div class="hint" id="hint">Speak naturally — Alex understands you</div>
+
+  </div>
+</div>
+
+<script>
+// ── CONFIG ─────────────────────────────────────────────────────────────────
+const BACKEND = 'https://YOUR-PROJECT.vercel.app/api/converse'; // ← CHANGE THIS
+
+const PRICES = { pizza: 12.50, burger: 8.99, salad: 7.00 };
+
+// ── STATE ──────────────────────────────────────────────────────────────────
+let active      = false;
+let processing  = false;
+let speaking    = false;
+let history     = [];
+let recognition = null;
+let synth       = window.speechSynthesis;
+let audioReady  = false;
+let liveOrder   = null;
+
+// ── HELPERS ────────────────────────────────────────────────────────────────
+function setState(s) {
+  document.body.className = 's-' + s;
+  const map = { idle:'Tap orb to start', listening:'Listening…', thinking:'Alex is thinking…', speaking:'Alex is speaking', done:'Order saved!' };
+  document.getElementById('label').textContent = map[s] || '';
+}
+
+function addMsg(role, text) {
+  const el = document.createElement('div');
+  el.className = 'msg msg-' + role;
+  el.textContent = text;
+  const chat = document.getElementById('chat');
+  chat.appendChild(el);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function setPill(txt, cls) {
+  const p = document.getElementById('pill');
+  p.textContent = txt;
+  p.className = 'pill ' + (cls || '');
+}
+
+function unlockAudio() {
+  if (audioReady) return;
+  const u = new SpeechSynthesisUtterance('');
+  synth.speak(u);
+  audioReady = true;
+}
+
+// ── SPEAK ──────────────────────────────────────────────────────────────────
+function speak(text) {
+  return new Promise(resolve => {
+    synth.cancel();
+    setState('speaking');
+    speaking = true;
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 1.05; u.pitch = 1.0; u.volume = 1.0;
+    const voices = synth.getVoices();
+    const pick = voices.find(v => /samantha|karen|daniel|google us english/i.test(v.name))
+               || voices.find(v => v.lang === 'en-US') || voices[0];
+    if (pick) u.voice = pick;
+    u.onend = () => { speaking = false; resolve(); };
+    u.onerror = () => { speaking = false; resolve(); };
+    synth.speak(u);
+  });
+}
+
+// ── RECOGNITION ────────────────────────────────────────────────────────────
+function startRec() {
+  if (!active || processing) return;
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { addMsg('system', 'Voice not supported. Use Chrome or Safari.'); return; }
+  recognition = new SR();
+  recognition.lang = 'en-US';
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.onstart = () => { if (!speaking) setState('listening'); };
+  recognition.onerror = e => {
+    if (e.error !== 'no-speech' && e.error !== 'aborted') addMsg('system', 'Mic: ' + e.error);
+    if (active && !processing) setTimeout(startRec, 600);
+  };
+  recognition.onend = () => {
+    if (active && !processing && !speaking) setTimeout(startRec, 300);
+  };
+  recognition.onresult = async e => {
+    const txt = e.results[0][0].transcript.trim();
+    if (!txt) return;
+    recognition.stop();
+    processing = true;
+    addMsg('user', txt);
+    await sendToAlex(txt);
+    processing = false;
+    if (active) startRec();
+  };
+  try { recognition.start(); } catch(_) {}
+}
+
+// ── API CALL ───────────────────────────────────────────────────────────────
+async function sendToAlex(userText) {
+  setState('thinking');
+  history.push({ role: 'user', content: userText });
+
+  try {
+    const res = await fetch(BACKEND, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: history })
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+
+    const reply      = data.reply      || "Sorry, didn't catch that — say that again?";
+    const savedOrder = data.saved_order || null;
+    const partial    = data.partial_order || null;
+
+    history.push({ role: 'assistant', content: reply });
+    addMsg('alex', reply);
+
+    if (partial) updateOrderCard(partial, false);
+    if (savedOrder) {
+      updateOrderCard(savedOrder, true);
+      await speak(reply);
+      setPill('Saved ✓', 'saved');
+      setState('done');
+      endCall(true);
+      return;
+    }
+
+    await speak(reply);
+  } catch (err) {
+    console.error(err);
+    const fb = "Hmm, connection hiccup — give me just a second!";
+    addMsg('alex', fb);
+    await speak(fb);
+  }
+}
+
+// ── ORDER CARD ─────────────────────────────────────────────────────────────
+function updateOrderCard(order, saved) {
+  if (!order || !order.items || !order.items.length) return;
+  liveOrder = order;
+  const card  = document.getElementById('orderCard');
+  const rows  = document.getElementById('orderRows');
+  const total = document.getElementById('orderTotalAmt');
+  const badge = document.getElementById('savedBadge');
+  card.classList.add('show');
+  rows.innerHTML = '';
+  let sum = 0;
+  order.items.forEach(item => {
+    const price = PRICES[item.toLowerCase()] || 0;
+    sum += price;
+    const d = document.createElement('div');
+    d.className = 'order-row';
+    d.innerHTML = `<span>${item.charAt(0).toUpperCase()+item.slice(1)}</span><span>$${price.toFixed(2)}</span>`;
+    rows.appendChild(d);
+  });
+  if (order.customer_name) {
+    const d = document.createElement('div');
+    d.className = 'order-row';
+    d.style.cssText = 'opacity:0.5;font-size:13px';
+    d.innerHTML = `<span>Name</span><span>${order.customer_name}</span>`;
+    rows.appendChild(d);
+  }
+  if (order.pickup_time) {
+    const d = document.createElement('div');
+    d.className = 'order-row';
+    d.style.cssText = 'opacity:0.5;font-size:13px';
+    d.innerHTML = `<span>Pickup</span><span>${order.pickup_time}</span>`;
+    rows.appendChild(d);
+  }
+  total.textContent = '$' + sum.toFixed(2);
+  badge.style.display = saved ? 'inline-block' : 'none';
+}
+
+// ── CALL LIFECYCLE ─────────────────────────────────────────────────────────
+async function startCall() {
+  unlockAudio();
+  active     = true;
+  history    = [];
+  processing = false;
+  speaking   = false;
+  liveOrder  = null;
+
+  document.getElementById('chat').innerHTML = '';
+  document.getElementById('orderCard').classList.remove('show');
+  document.getElementById('btnStart').classList.add('hide');
+  document.getElementById('btnEnd').classList.add('show');
+  document.getElementById('hint').textContent = 'Speak freely — tap "End call" when done';
+  setPill('Live', 'live');
+
+  const greeting = "Hey there! Welcome to My Shop — I'm Alex. What can I get started for you today?";
+  addMsg('alex', greeting);
+  history.push({ role: 'assistant', content: greeting });
+  await speak(greeting);
+  if (active) startRec();
+}
+
+function endCall(silent) {
+  active = false;
+  if (recognition) { try { recognition.stop(); } catch(_){} recognition = null; }
+  if (!silent) synth.cancel();
+  speaking   = false;
+  processing = false;
+
+  document.getElementById('btnStart').classList.remove('hide');
+  document.getElementById('btnEnd').classList.remove('show');
+  document.getElementById('hint').textContent = 'Speak naturally — Alex understands you';
+
+  if (!silent) {
+    setPill('Offline');
+    setState('idle');
+  }
+}
+
+function handleOrbTap() { if (!active) startCall(); }
+
+// preload voices
+if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = () => synth.getVoices();
+else synth.getVoices();
+</script>
+</body>
+</html>

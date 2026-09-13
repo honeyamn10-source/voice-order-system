@@ -1,4 +1,12 @@
-# My Shop — Voice Agent · Deploy Guide
+# Voice Order System
+
+A browser voice-order prototype that collects pickup details through speech recognition, an AI conversation backend, and speech synthesis.
+
+**Stage:** Prototype requiring deployment setup and end-to-end validation.
+
+> **Deployment prerequisite:** This repository currently stores the handler at `converse.js`, while `vercel.json` and the deployment structure below expect `api/converse.js`. Place the handler at that expected path before deploying the backend. The structure below is the target deployment layout.
+
+## Deployment guide
 
 ## File Structure
 ```
@@ -42,7 +50,7 @@ myshop/
 
 ---
 
-## How It Works (Retell AI-style)
+## How it works
 ```
 User speaks
     ↓ Web Speech API (browser built-in)
@@ -72,7 +80,6 @@ SELECT * FROM recent_orders;
 SELECT * FROM daily_summary;
 ```
 
-## Voice Support
-- Desktop: Chrome, Edge (full support)
-- iOS Safari: works with audio unlock (handled automatically)
-- Firefox: not supported (no SpeechRecognition API)
+## Voice support
+
+The frontend relies on browser speech recognition and speech synthesis. Availability and microphone permissions vary by browser and device; verify recognition, playback, and saved orders on your target devices. This project is a browser voice interface, not a verified telephone integration.

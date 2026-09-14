@@ -1,3 +1,5 @@
+![Voice Order System — project cover](https://github.com/honeyamn10-source/honeyamn10-source/blob/main/assets/voice-order-system.svg?raw=true)
+
 # Voice Order System
 
 A browser voice-order prototype that collects pickup details through speech recognition, an AI conversation backend, and speech synthesis.

@@ -6,7 +6,11 @@ A browser voice-order prototype that collects pickup details through speech reco
 
 **Stage:** Prototype requiring deployment setup and end-to-end validation.
 
-> **Deployment prerequisite:** This repository currently stores the handler at `converse.js`, while `vercel.json` and the deployment structure below expect `api/converse.js`. Place the handler at that expected path before deploying the backend. The structure below is the target deployment layout.
+The backend entry point is `api/converse.js`, which re-exports the handler from `converse.js`. The repository includes syntax and request-handler checks in GitHub Actions.
+
+## Checks
+
+Use Node.js 22, then run `npm run check` and `npm test`. Tests use a mocked model response; no API keys or database are required. Live speech recognition, model access and order persistence still need deployment acceptance testing.
 
 ## Deployment guide
 

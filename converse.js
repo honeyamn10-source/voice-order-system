@@ -82,6 +82,10 @@ const MODELS = [
 
 const PRICES = { pizza: 12.50, burger: 8.99, salad: 7.00 };
 
+const MAX_MESSAGES = 24;
+const MAX_ITEMS = 12;
+const MAX_ORDER_TOTAL = 1000.0;
+
 // ── Supabase helper (no SDK needed — just REST) ────────────────────────────
 async function saveOrder(order) {
   const url = `${process.env.SUPABASE_URL}/rest/v1/orders`;
@@ -152,9 +156,18 @@ function parseSaveOrder(raw) {
   if (!match) return null;
   try {
     const order = JSON.parse(match[1]);
-    // recalculate total for safety
-    const total = (order.items || []).reduce((sum, item) => sum + (PRICES[item.toLowerCase()] || 0), 0);
+    // Validate item names against the menu; drop unknown items.
+    const items = (order.items || [])
+      .map((item) => String(item).trim().toLowerCase())
+      .filter((item) => Object.prototype.hasOwnProperty.call(PRICES, item))
+      .slice(0, MAX_ITEMS);
+    order.items = items;
+    // Recalculate total for safety.
+    const total = items.reduce((sum, item) => sum + PRICES[item], 0);
     order.total = Math.round(total * 100) / 100;
+    // Reject clearly-invalid orders (nothing valid, or implausible totals).
+    if (items.length === 0) return null;
+    if (order.total < 0 || order.total > MAX_ORDER_TOTAL) return null;
     return order;
   } catch (e) {
     console.warn('[Alex] Failed to parse SAVE_ORDER JSON:', e.message);
@@ -166,17 +179,17 @@ function parseSaveOrder(raw) {
 function detectPartial(messages) {
   const allText = messages.map(m => m.content).join(' ').toLowerCase();
   const items = [];
-  if (/pizza/.test(allText)) items.push('pizza');
-  if (/burger/.test(allText)) items.push('burger');
-  if (/salad/.test(allText)) items.push('salad');
+  if (/\bpizza\b/.test(allText)) items.push('pizza');
+  if (/\bburger\b/.test(allText)) items.push('burger');
+  if (/\bsalad\b/.test(allText)) items.push('salad');
 
-  const nameMatch  = allText.match(/name[^\w]+([a-z]+)/i);
-  const phoneMatch = allText.match(/(\d[\d\s\-().]{6,14}\d)/);
+  const nameMatch  = allText.match(/my name is ([a-z]+)|(?:i['’]m|i am) ([a-z]+)\b/im);
+  const phoneMatch = allText.match(/(\+?\d[\d\s\-().]{6,14}\d)/);
   const timeMatch  = allText.match(/(\d{1,2}(?::\d{2})?\s?(?:am|pm)|noon|midnight)/i);
 
   return {
     items,
-    customer_name: nameMatch?.[1] || '',
+    customer_name: (nameMatch?.[1] || nameMatch?.[2] || '').replace(/^./, (c) => c.toUpperCase()),
     phone:         phoneMatch?.[1] || '',
     pickup_time:   timeMatch?.[1] || '',
   };
@@ -192,8 +205,11 @@ export default async function handler(req, res) {
   if (req.method !== 'POST')   return res.status(405).json({ error: 'Method not allowed' });
 
   const { messages } = req.body || {};
-  if (!messages || !Array.isArray(messages)) {
+  if (!messages || !Array.isArray(messages) || messages.length === 0) {
     return res.status(400).json({ error: 'messages array required' });
+  }
+  if (messages.length > MAX_MESSAGES) {
+    return res.status(400).json({ error: `too many messages (max ${MAX_MESSAGES})` });
   }
 
   try {

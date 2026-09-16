@@ -1,6 +1,10 @@
 <!-- voice-order-system | Bittu Sharma | ultra-level professional README -->
 <p align="center">
-  <img src="docs/assets/logo.svg" alt="Voice Order System logo" width="100%" />
+  <img src="docs/assets/logo.svg" alt="voice-order-system logo" width="100%" />
+</p>
+
+
+<p align="center">
 </p>
 
 

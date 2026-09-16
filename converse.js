@@ -217,8 +217,8 @@ export default async function handler(req, res) {
     console.log('[Alex] Raw response:', raw.substring(0, 200));
 
     const order = parseSaveOrder(raw);
-    // strip the [SAVE_ORDER:...] block from what gets spoken
-    const reply = raw.replace(/\[SAVE_ORDER:[\s\S]*?\]/, '').trim();
+    // strip the [SAVE_ORDER:{...}] block from what gets spoken
+    const reply = raw.replace(/\[SAVE_ORDER:\{[\s\S]*?\}\]/, '').trim();
 
     let savedOrder = null;
     if (order) {

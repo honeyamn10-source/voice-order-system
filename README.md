@@ -1,27 +1,24 @@
-<p align="center">
-  <img src="https://github.com/honeyamn10-source/honeyamn10-source/raw/main/assets/voice-order-system.svg" alt="Voice Order System" width="100%" />
-</p>
+<p align="center"><img src="docs/assets/readme-cover.svg" alt="Voice Order System — Speak an order. Review it. Save it." width="100%"></p>
 
 <h1 align="center">Voice Order System</h1>
+<p align="center"><strong>Speak an order. Review it. Save it.</strong></p>
+<p align="center"><a href="#project-at-a-glance">Overview</a> · <a href="#start-here">Start here</a> · <a href="#project-guide">Project guide</a> · <a href="https://github.com/honeyamn10-source/voice-order-system/issues">Issues</a></p>
 
-<p align="center">
-  <b>Conversational ordering over the phone — powered by the browser's native speech engine.</b>
-  <br />
-  <em>Collect pickup orders through a natural voice conversation, backed by an AI model and persisted to Supabase.</em>
-</p>
+[![CI](https://github.com/honeyamn10-source/voice-order-system/actions/workflows/blank.yml/badge.svg)](https://github.com/honeyamn10-source/voice-order-system/actions/workflows/blank.yml)
 
-<p align="center">
-  <a href="https://github.com/honeyamn10-source/voice-order-system/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
-  <a href="https://github.com/honeyamn10-source/voice-order-system"><img src="https://img.shields.io/badge/version-0.1.0-blue.svg" alt="Version"></a>
-  <a href="https://github.com/honeyamn10-source/voice-order-system/actions/workflows/blank.yml"><img src="https://img.shields.io/badge/CI-passing-brightgreen.svg" alt="CI"></a>
-  <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/node.js-22.x-339933.svg" alt="Node.js 22"></a>
-</p>
+Browser speech, conversational order capture and backend persistence.
 
----
+## Project at a glance
 
-A browser voice-order prototype that turns a phone call into a guided conversation. **Alex** — an AI assistant — collects the order item-by-item through speech recognition (Web Speech API), confirms the details aloud via speech synthesis, and saves the structured order to a Supabase database.
+| Current scope | Release boundary |
+| --- | --- |
+| **Browser prototype** | Telephone integration is not implemented by the browser speech flow. |
 
-> **Stage:** Prototype requiring deployment setup and end-to-end validation.
+## Start here
+
+Use the setup commands in the project guide below. Check configuration and current workflow results before deploying.
+
+## Project guide
 
 ## ✨ Features
 
@@ -57,7 +54,7 @@ Alex collects the order in four guided turns:
 1. **Items** — pizza / burger / salad
 2. **Customer name**
 3. **Phone number**
-4. **Pickup time** → confirms → saves to Supabase → call ends
+4. **Pickup time** → confirms → saves to Supabase → browser session ends
 
 ## 📁 Repository layout
 

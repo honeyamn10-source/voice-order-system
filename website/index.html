@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>voice-order-system — voice ordering with Web Speech API</title>
+  <meta name="description" content="voice-order-system is a voice-driven ordering system using Web Speech API, OpenRouter (Mistral Nemo → Mistral 7B → Llama 3.1 8B fallback), Supabase backend. 6 hermetic tests.">
+  <meta name="keywords" content="voice ordering, web speech api, speech recognition, speech synthesis, openrouter, supabase, restaurant ordering">
+  <meta name="author" content="Bittu Sharma">
+  <link rel="canonical" href="https://honeyamn10-source.github.io/voice-order-system/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="voice-order-system">
+  <meta property="og:title" content="voice-order-system — voice ordering with Web Speech API">
+  <meta property="og:description" content="Voice ordering with Web Speech API. OpenRouter fallback chain. Supabase backend. 6 hermetic tests.">
+  <meta property="og:url" content="https://honeyamn10-source.github.io/voice-order-system/">
+  <meta property="og:image" content="https://honeyamn10-source.github.io/voice-order-system/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="voice-order-system — voice ordering with Web Speech API">
+  <meta name="twitter:description" content="Voice ordering with Web Speech API. OpenRouter fallback. Supabase. 6 hermetic tests.">
+  <meta name="twitter:image" content="https://honeyamn10-source.github.io/voice-order-system/og.png">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#f59e0b">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="assets/site.css">
+  <link rel="sitemap" type="application/xml" href="sitemap.xml">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "voice-order-system",
+    "url": "https://honeyamn10-source.github.io/voice-order-system/",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web (Chrome/Edge/Firefox/Safari)",
+    "description": "Voice-driven ordering system using Web Speech API, OpenRouter LLM fallback, Supabase backend.",
+    "author": { "@type": "Person", "name": "Bittu Sharma" },
+    "license": "https://github.com/honeyamn10-source/voice-order-system/blob/main/LICENSE",
+    "codeRepository": "https://github.com/honeyamn10-source/voice-order-system"
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#top" aria-label="voice-order-system home">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#f59e0b"/><text x="32" y="45" font-family="ui-monospace,Consolas,monospace" font-size="34" font-weight="700" fill="#0b0e14" text-anchor="middle">V</text></svg>
+        voice-order-system
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#flow">Voice Flow</a>
+        <a href="#llm">LLM Fallback</a>
+        <a href="#backend">Backend</a>
+        <a href="#tests">Tests</a>
+        <a href="https://github.com/honeyamn10-source/voice-order-system" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Switch theme">☀️</button>
+      <button class="nav-burger" type="button" aria-expanded="false" aria-label="Toggle navigation">☰</button>
+    </div>
+    <div class="drawer-backdrop"></div>
+    <nav class="mobile-drawer" aria-label="Mobile navigation">
+      <a href="#flow">Voice Flow</a>
+      <a href="#llm">LLM Fallback</a>
+      <a href="#backend">Backend</a>
+      <a href="#tests">Tests</a>
+      <a href="https://github.com/honeyamn10-source/voice-order-system" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="wrap">
+        <div class="hero-grid">
+          <div class="hero-inner">
+            <span class="status"><span class="dot" aria-hidden="true"></span> v0.1.0 · MIT · Web Speech API · OpenRouter · Supabase</span>
+            <h1>Order by voice. Powered by AI.</h1>
+            <p class="lede">voice-order-system lets customers place orders by speaking. Web Speech API handles recognition/synthesis. OpenRouter provides LLM fallback chain (Mistral Nemo → Mistral 7B → Llama 3.1 8B). Supabase stores orders. 6 hermetic tests.</p>
+            <div class="badge-row">
+              <span class="badge badge-b">Web Speech API</span>
+              <span class="badge badge-b">OpenRouter</span>
+              <span class="badge badge-b">Supabase</span>
+              <span class="badge badge-b">6 tests</span>
+            </div>
+            <div class="btn-row">
+              <a class="btn btn-primary btn-lg" href="#flow">See Voice Flow</a>
+              <a class="btn btn-ghost btn-lg" href="https://github.com/honeyamn10-source/voice-order-system" target="_blank" rel="noopener">GitHub</a>
+            </div>
+          </div>
+          <div class="term" role="img" aria-label="Voice conversation demo">
+            <div class="term-bar"><i class="t1"></i><i class="t2"></i><i class="t3"></i><span>voice-order-session</span></div>
+            <div class="term-body" data-type="true" data-type-speed="10">
+<span class="c3">🎤 Listening...</span>
+<span class="dim">User: "I'd like a large pepperoni pizza and a coke"</span>
+
+<span class="c3">🤖 Processing with Alex (Mistral Nemo)...</span>
+<span class="dim">Intent: ORDER | Items: pepperoni pizza (large), coke</span>
+<span class="dim">Confidence: 0.94</span>
+
+<span class="c3">Alex:</span> "Got it — large pepperoni pizza and a coke. 
+That'll be $14.99. Anything else?"
+
+<span class="c3">🎤 Listening...</span>
+<span class="dim">User: "No, that's it"</span>
+
+<span class="c3">🤖 Processing...</span>
+<span class="dim">Intent: CONFIRM | Action: SAVE_ORDER</span>
+
+<span class="c3">Alex:</span> "Perfect! Your order is confirmed. 
+Order #ORD-7K9M2. Ready in 20 minutes."
+
+<span class="c3">[SAVE_ORDER:{"orderId":"ORD-7K9M2","items":[{"name":"Pepperoni Pizza","size":"large","price":12.99},{"name":"Coke","price":2.00}],"total":14.99,"status":"confirmed"}]</span>
+
+<span class="c4">✓ Order saved to Supabase</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top: var(--space-4);">
+      <div class="wrap">
+        <div class="stats-row">
+          <div class="stat"><div class="stat-value">24</div><div class="stat-label">Max Messages</div></div>
+          <div class="stat"><div class="stat-value">12</div><div class="stat-label">Max Items</div></div>
+          <div class="stat"><div class="stat-value">$1000</div><div class="stat-label">Max Order Value</div></div>
+          <div class="stat"><div class="stat-value">6</div><div class="stat-label">Hermetic Tests</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="flow" class="section reveal">
+      <div class="wrap">
+        <h2>Voice Flow</h2>
+        <p class="lede">From "Hello" to confirmed order in 4 steps.</p>
+        <div class="grid cards">
+          <article class="card"><h3>1. Wake & Greet</h3><p>User clicks microphone. Alex (persona) greets: "Hi! I'm Alex. What can I get you today?" SpeechRecognition starts.</p></article>
+          <article class="card"><h3>2. Natural Language</h3><p>User speaks naturally: "Two large pepperoni, one coke, no ice." Web Speech API → text. Sent to LLM for intent parsing.</p></article>
+          <article class="card"><h3>3. Confirm & Clarify</h3><p>Alex reads back: "Two large pepperoni pizzas, one coke no ice. That's $28.50. Correct?" User says "Yes" or corrects.</p></article>
+          <article class="card"><h3>4. Save & Notify</h3><p>On confirmation, <code>[SAVE_ORDER:{...}]</code> block emitted. Supabase inserts order. Kitchen display updates. SMS sent if phone provided.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="llm" class="section alt reveal">
+      <div class="wrap">
+        <h2>LLM Fallback Chain</h2>
+        <p class="lede">Three-tier cascade. Automatic failover. Zero config if you have OpenRouter key.</p>
+        <div class="term" role="img" aria-label="Fallback chain">
+          <div class="term-bar"><i class="t1"></i><i class="t2"></i><i class="t3"></i><span>llm_fallback.py</span></div>
+          <div class="term-body">
+<span class="c3">FALLBACK CHAIN (OpenRouter)</span>
+<span class="dim">─────────────────────────────────────</span>
+
+<span class="c3">1️⃣  PRIMARY: Mistral Nemo (12B)</span>
+<span class="dim">   Model: mistralai/mistral-nemo:free</span>
+<span class="dim">   Context: 128k tokens</span>
+<span class="dim">   Strength: Instruction following, JSON mode</span>
+<span class="dim">   Latency: ~800ms</span>
+
+<span class="c1">   ↓ on error / timeout / rate limit</span>
+
+<span class="c3">2️⃣  SECONDARY: Mistral 7B Instruct</span>
+<span class="dim">   Model: mistralai/mistral-7b-instruct:free</span>
+<span class="dim">   Context: 32k tokens</span>
+<span class="dim">   Strength: Fast, reliable, good JSON</span>
+<span class="dim">   Latency: ~400ms</span>
+
+<span class="c1">   ↓ on error / timeout / rate limit</span>
+
+<span class="c3">3️⃣  TERTIARY: Llama 3.1 8B</span>
+<span class="dim">   Model: meta-llama/llama-3.1-8b-instruct:free</span>
+<span class="dim">   Context: 128k tokens</span>
+<span class="dim">   Strength: Robust, multilingual</span>
+<span class="dim">   Latency: ~600ms</span>
+
+<span class="c3">─────────────────────────────────────</span>
+<span class="c2">All models: FREE tier on OpenRouter</span>
+<span class="c2">Fallback: Automatic, < 2s switchover</span>
+<span class="c2">Config: OPENROUTER_API_KEY env var</span>
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="backend" class="section reveal">
+      <div class="wrap">
+        <h2>Backend: Supabase</h2>
+        <p class="lede">Orders table with RLS. Real-time subscriptions for kitchen display.</p>
+        <div class="term" role="img" aria-label="Supabase schema">
+          <div class="term-bar"><i class="t1"></i><i class="t2"></i><i class="t3"></i><span>schema.sql</span></div>
+          <div class="term-body">
+<span class="c1">create table orders (</span>
+<span class="c1">  id uuid primary key default gen_random_uuid(),</span>
+<span class="c1">  order_id text unique not null,      -- ORD-7K9M2</span>
+<span class="c1">  customer_phone text,</span>
+<span class="c1">  items jsonb not null,               -- [{name, size, price, qty}]</span>
+<span class="c1">  total_cents int not null,           -- 1499</span>
+<span class="c1">  status text not null default 'pending', -- pending/confirmed/preparing/ready/completed</span>
+<span class="c1">  persona text not null default 'alex',</span>
+<span class="c1">  llm_model text,                     -- which model succeeded</span>
+<span class="c1">  created_at timestamptz default now(),</span>
+<span class="c1">  updated_at timestamptz default now()</span>
+<span class="c1">);</span>
+
+<span class="c1">-- RLS: customers see own orders, staff see all</span>
+<span class="c1">alter table orders enable row level security;</span>
+
+<span class="c1">create policy "customer own" on orders</span>
+<span class="c1">  for select using (auth.uid() = customer_id);</span>
+
+<span class="c1">create policy "staff all" on orders</span>
+<span class="c1">  for all using (auth.jwt() ->> 'role' = 'staff');</span>
+
+<span class="c1">-- Real-time for kitchen display</span>
+<span class="c1">alter publication supabase_realtime add table orders;</span>
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tests" class="section alt reveal">
+      <div class="wrap">
+        <h2>Test Suite (6 Hermetic Tests)</h2>
+        <p class="lede">No network. No external APIs. Mocked SpeechRecognition, SpeechSynthesis, Supabase, OpenRouter.</p>
+        <div class="grid cards" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+          <article class="card"><h4>test_greeting.py</h4><p>Alex greets correctly. Persona loads. SpeechSynthesis called with expected text.</p></article>
+          <article class="card"><h4>test_intent_parsing.py</h4><p>LLM extracts items, sizes, modifiers. Handles "no ice", "extra cheese", quantities.</p></article>
+          <article class="card"><h4>test_fallback_chain.py</h4><p>Primary fails → secondary succeeds. Secondary fails → tertiary succeeds. All fail → graceful error.</p></article>
+          <article class="card"><h4>test_save_order.py</h4><p><code>[SAVE_ORDER:{...}]</code> block emitted. Supabase insert called with correct shape. RLS respected.</p></article>
+          <article class="card"><h4>test_limits.py</h4><p>24 message cap enforced. 12 item cap enforced. $1000 cap enforced. Graceful rejection.</p></article>
+          <article class="card"><h4>test_persona.py</h4><p>Alex persona consistent. Tone: helpful, concise, confirms prices. No hallucination.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section reveal">
+      <div class="wrap">
+        <div class="cta-banner">
+          <h3>Voice ordering, production-ready.</h3>
+          <p style="max-width: 600px; margin: 0 auto var(--space-5);">Web Speech API + OpenRouter + Supabase. 6 hermetic tests. Fixed menu, capped orders.</p>
+          <div class="btn-row" style="justify-content: center;">
+            <a class="btn btn-primary btn-lg" href="https://github.com/honeyamn10-source/voice-order-system" target="_blank" rel="noopener">GitHub →</a>
+            <a class="btn btn-ghost btn-lg" href="#flow">Explore Flow</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>voice-order-system v0.1.0 · <a href="https://github.com/honeyamn10-source/voice-order-system">GitHub</a> · <a href="https://github.com/honeyamn10-source/voice-order-system/blob/main/LICENSE">MIT License</a></p>
+    </div>
+  </footer>
+  <script src="assets/site.js"></script>
+</body>
+</html>

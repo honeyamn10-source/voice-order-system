@@ -2,6 +2,21 @@
 
 # Voice Order
 
+<!-- repo-badges:start -->
+<div align="center">
+
+[![Stars](https://img.shields.io/github/stars/honeyamn10-source/voice-order-system?style=flat-square&logo=github&label=Stars)](https://github.com/honeyamn10-source/voice-order-system/stargazers)
+[![Forks](https://img.shields.io/github/forks/honeyamn10-source/voice-order-system?style=flat-square&logo=github&label=Forks)](https://github.com/honeyamn10-source/voice-order-system/forks)
+[![Issues](https://img.shields.io/github/issues/honeyamn10-source/voice-order-system?style=flat-square&logo=github&label=Issues)](https://github.com/honeyamn10-source/voice-order-system/issues)
+[![Last Commit](https://img.shields.io/github/last-commit/honeyamn10-source/voice-order-system?style=flat-square&logo=github&label=Last%20Commit)](https://github.com/honeyamn10-source/voice-order-system/commits/main)
+[![License](https://img.shields.io/github/license/honeyamn10-source/voice-order-system?style=flat-square&label=License)](https://github.com/honeyamn10-source/voice-order-system/blob/main/LICENSE)
+
+[Repository](https://github.com/honeyamn10-source/voice-order-system) · [Issues](https://github.com/honeyamn10-source/voice-order-system/issues) · [Pull Requests](https://github.com/honeyamn10-source/voice-order-system/pulls) · [Actions](https://github.com/honeyamn10-source/voice-order-system/actions)
+
+</div>
+<!-- repo-badges:end -->
+
+
 A browser voice interface with a serverless conversation endpoint and a small restaurant menu.
 
 [Project website](https://honeyamn10-source.github.io/voice-order-system/) · [Build results](https://github.com/honeyamn10-source/voice-order-system/actions)

@@ -1,84 +1,47 @@
-<!-- voice-order-system | Bittu Sharma | ultra-level professional README -->
-<p align="center">
-  <img src="docs/assets/logo.svg" alt="voice-order-system logo" width="100%" />
-</p>
+![Voice Order](docs/assets/cover.svg)
 
+# Voice Order
 
-<p align="center">
-</p>
+A browser voice interface with a serverless conversation endpoint and a small restaurant menu.
 
+[Project website](https://honeyamn10-source.github.io/voice-order-system/) · [Build results](https://github.com/honeyamn10-source/voice-order-system/actions)
 
-<p align="center">
-  <strong style="font-size:3rem;color:#0EA5E9;">voice-order-system</strong>
-</p>
-<p align="center">
-  <em style="font-size:1.2rem;color:#94A3B8;">Voice-driven order entry system</em>
-</p>
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-Python-blue?logo=python&logoColor=white" alt="Python"/>  <img src="https://img.shields.io/badge/FastAPI-FastAPI-blue?logo=fastapi&logoColor=white" alt="FastAPI"/>  <img src="https://img.shields.io/badge/WebRTC-WebRTC-blue?logo=webrtc&logoColor=white" alt="WebRTC"/>  <img src="https://img.shields.io/badge/Whisper-Whisper-blue?logo=whisper&logoColor=white" alt="Whisper"/>
-  <img src="https://img.shields.io/badge/License-MIT-blue" alt="MIT License"/>
-  <img src="https://img.shields.io/badge/Loopback-Only-0EA5E9" alt="Loopback Only"/>
-  <img src="https://img.shields.io/badge/ADR-Trail%20(0001..0003)-F59E0B" alt="ADR Trail"/>
-</p>
+## What it does
 
----
+- **Listen and review.** The browser interface handles the conversation and shows the order.
+- **Validate menu items.** The server filters known items and recalculates the total.
+- **Save the request.** A configured database stores the order; the API reports whether saving succeeded.
 
-## Why this exists
+## Start from source
 
-A professional voice-driven order entry system built to the portfolio ultra-level standard:
-honest code, loopback-only demos, zero personal emails in history, and every
-architectural decision recorded in the ADR trail.
-
----
-
-## Quick Start
+Node.js and a Vercel-compatible server runtime. Configure OPENROUTER_API_KEY, SUPABASE_URL and SUPABASE_ANON_KEY on the server.
 
 ```bash
-# Clone and install
 git clone https://github.com/honeyamn10-source/voice-order-system.git
 cd voice-order-system
-# Follow repo-specific setup instructions
+npm test
+# After configuring the server environment:
+npx vercel dev
 ```
 
----
+## Verify
 
-## Features
-
-- Professional codebase with full test coverage
-- Loopback-only serving — zero unauthenticated remote access
-- ADR trail documenting all architectural decisions
-- CI/CD pipeline with lint, test, typecheck, and build
-- Professional identity on all commits
-
----
-
-## Architecture
-
-```mermaid
-graph TB
-    subgraph "Client"
-        UI[Web UI / CLI]
-    end
-    subgraph "Server"
-        API[API Layer]
-        DB[(Database)]
-    end
-    UI --> API
-    API --> DB
-    API -->|Loopback Only| LB[127.0.0.1]
+```bash
+npm test
 ```
 
----
+## Scope
 
-## Security
+A prototype, not a connected phone line or payment system. Browser speech support varies. Serving the static HTML alone does not provide /api/converse.
 
-- Loopback-only serving (127.0.0.1)
-- Professional commit identity
-- Zero personal emails in history
-- ADR trail for all decisions
+## Find your way around
 
----
+- [Order validation](converse.js)
+- [Serverless entry point](api/converse.js)
+- [Database schema](supabase_schema.sql)
 
-## License
+## Contributing and license
 
-MIT © 2026 Bittu Sharma
+See [CONTRIBUTING.md](CONTRIBUTING.md). Include a minimal reproduction and runtime versions with bug reports; remove credentials from logs.
+
+MIT — see [LICENSE](LICENSE). Third-party dependencies retain their applicable licenses.

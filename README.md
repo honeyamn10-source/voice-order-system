@@ -15,6 +15,18 @@
 </div>
 <!-- repo-badges:end -->
 
+<!-- professional-meta:start -->
+<div align="center">
+
+[![ci](https://github.com/honeyamn10-source/voice-order-system/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/honeyamn10-source/voice-order-system/actions/workflows/ci.yml) [![codeql](https://github.com/honeyamn10-source/voice-order-system/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/honeyamn10-source/voice-order-system/actions/workflows/codeql.yml)
+
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=white) ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=nodedotjs&logoColor=white) ![Supabase](https://img.shields.io/badge/Supabase-3FCF8E?style=flat-square&logo=supabase&logoColor=white) ![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white)
+
+[Documentation](docs) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Changelog](CHANGELOG.md) · [Live Demo](https://honeyamn10-source.github.io/voice-order-system/)
+
+</div>
+<!-- professional-meta:end -->
+
 
 
 
